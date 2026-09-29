@@ -49,7 +49,9 @@ export async function init(options: InitOptions) {
   console.log(`  ${AGENT_SETUP_PROMPT}`);
   console.log('');
   console.log(`Reference: ${SETUP_DOCS_URL}`);
-  console.log(`Once ${APP_SPEC_FILE_NAME} describes your app, run \`modelence deploy\`.`);
+  console.log(
+    `Once ${APP_SPEC_FILE_NAME} describes your app, check it with \`modelence verify\`, then run \`modelence deploy\`.`
+  );
 }
 
 async function exists(path: string): Promise<boolean> {

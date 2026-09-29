@@ -184,10 +184,14 @@ Follow these steps in order. Do not skip the verification step.
    `node-22-slim`; use `slim` unless the project already builds on Alpine). Set `root` when the app
    lives in a subdirectory. Add `"$schema": "https://cloud.modelence.com/schema/modelence.config.json?version=1"`.
 
-8. **Verify locally.** Run the build commands, then the start commands with `PORT=3000` set, in
-   order — exactly as written in the file — and confirm the app answers on
-   `http://localhost:3000` (for a static site, confirm the `dir` exists after the build and holds
-   `index.html`). Fix the file or the code until this works; a deploy runs the same commands.
+8. **Verify locally.** Run `npx modelence@latest verify` in the project directory. It checks the
+   file for the mistakes this page warns about, runs the build commands on a clean copy of exactly
+   the files `modelence deploy` uploads (local `.env` files are left out, as they are in a deploy),
+   starts the result through the same runtime Modelence Cloud uses, on a random `PORT`, and checks
+   that the app answers on every interface, that the scripts and stylesheets of `/` load, and that
+   static directories fall back to `index.html`. It exits non-zero with the reason when something
+   fails. Fix the file or the code until it passes. If the app needs a database to start, pass
+   `--mongodb-uri mongodb://127.0.0.1:27017/verify` or any other MongoDB you can reach.
 
 9. **Commit `modelence.config.json`** together with any code changes (the `PORT` change, the
    production start script).

@@ -11,6 +11,7 @@ import { dev } from './dev';
 import { start } from './start';
 import { logout } from './logout';
 import { init } from './init';
+import { verify } from './verify';
 import { loadEnv } from './config';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -74,6 +75,25 @@ program
       await init(options);
     } catch (error) {
       console.error(`Init failed: ${error instanceof Error ? error.message : String(error)}`);
+      process.exit(1);
+    }
+  });
+
+program
+  .command('verify')
+  .description(
+    'Rehearse a deploy locally: check modelence.config.json, build the files deploy uploads and start them through the Modelence runtime'
+  )
+  .option('--in-place', 'Build in the project directory instead of a clean copy of the upload')
+  .option('--keep', 'Leave the app running after the checks, until Ctrl+C')
+  .option('--timeout <seconds>', 'How long the app gets to open PORT', '60')
+  .option('--mongodb-uri <uri>', 'Database to give the app as MONGODB_URI (the cloud provides one)')
+  .action(async (options) => {
+    try {
+      const passed = await verify(options);
+      process.exit(passed ? 0 : 1);
+    } catch (error) {
+      console.error(`Verify failed: ${error instanceof Error ? error.message : String(error)}`);
       process.exit(1);
     }
   });
